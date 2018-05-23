@@ -11,10 +11,18 @@ import UIKit
 class TodoListViewController: UITableViewController {
 
     var itemArray = ["One", "Two", "Three"];
+    let defaults = UserDefaults.standard
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        if let items = defaults.array(forKey: "TodoListArray") as? [String]{
+            itemArray = items
+        }
+        
+        // This shows the path to document directory
+        print(NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true))
     }
 
     
@@ -54,6 +62,7 @@ class TodoListViewController: UITableViewController {
         let action = UIAlertAction(title: "Add item", style: .default) { (action) in
             
             self.itemArray.append(textfield.text!)
+            self.defaults.set(self.itemArray, forKey: "TodoListArray")
             self.tableView.reloadData()
         }
         alert.addAction(action)
